@@ -39,6 +39,10 @@ jobs:
       - name: "Authenticate Dev Hub"
         run: sf org login sfdx-url -f ./DEVHUB_SFDX_URL.txt -a devhub -d
 
+      # List orgs
+      - name: "List orgs"
+        run: sf org list
+
       # Delete branch's scratch org
       - name: "Delete scratch org"
         if: always()
