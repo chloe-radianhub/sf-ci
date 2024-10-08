@@ -1,9 +1,9 @@
 public with sharing class ExampleClass {
-    public ExampleClass() {
-    }
+  public ExampleClass() {
+  }
 
-    @AuraEnabled
-    public static Decimal addOne(Decimal num) {
-        return num + 1;
-    }
+  @AuraEnabled
+  public static Decimal addOne(Decimal num) {
+    return num + 1;
+  }
 }
