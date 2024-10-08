@@ -5,7 +5,7 @@ export default class Example extends LightningElement {
     @api hi;
     test;
 
-    connectedCallback() {
+    async connectedCallback() {
         // setTimeout(async () => {
         // this.test = await addOne(4);
         // })
