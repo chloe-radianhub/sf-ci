@@ -6,8 +6,9 @@ export default class Example extends LightningElement {
     test;
 
     connectedCallback() {
-        setTimeout(async () => {
-        this.test = await addOne(4);
-        })
+        // setTimeout(async () => {
+        // this.test = await addOne(4);
+        // })
+        this.test = await addOne({num: 4});
     }
 }
