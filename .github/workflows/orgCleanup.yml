@@ -42,4 +42,4 @@ jobs:
       # Delete branch's scratch org
       - name: "Delete scratch org"
         if: always()
-        run: sf org delete scratch -p -o my-scratch
+        run: sf org delete scratch --target-org my-scratch --no-prompt
