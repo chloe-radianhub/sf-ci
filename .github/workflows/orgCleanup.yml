@@ -49,4 +49,5 @@ jobs:
         run: |
           echo "Current Branch Name: ${{ github.ref_name }}"
           echo "Current Branch: ${{ github.ref }}"
+          echo "Current Branch: ${{ github.head_ref }}"
           sf data delete record --sobject ActiveScratchOrg --where "OrgName=${{ github.ref_name }}" --target-org devhub
