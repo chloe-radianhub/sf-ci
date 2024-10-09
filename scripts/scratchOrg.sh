@@ -42,5 +42,4 @@ branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
 scratchOrgName="$project-$branch"
 
 echo_wrapper "Create Scratch Org" 
-# sf org create scratch -f ./config/project-scratch-def.json -a "$scratchOrgName" -y 14 -w 60 -d
 sf org create scratch -f ./config/project-scratch-def.json -a my-scratch -y 14 -w 60 -d --target-dev-hub ghActionPlayground --name "$scratchOrgName"
