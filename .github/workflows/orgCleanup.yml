@@ -5,7 +5,8 @@ name: OrgCleanup
 on:
   pull_request:
     branches: [QA]
-    types: [closed]
+    types: [opened, synchronize]
+    # types: [closed]
 
 # Jobs to be executed
 jobs:
@@ -45,5 +46,8 @@ jobs:
 
       # Delete branch's scratch org
       - name: "Delete scratch org"
-        if: always()
-        run: sf org delete scratch -p -o my-scratch
+        run: |
+          project="lp-eta"
+          branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+          scratchOrgName="$project-$branch"
+          sf data delete record --sobject ActiveScratchOrg --where "OrgName=$scratchOrgName"
