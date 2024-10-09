@@ -4,7 +4,7 @@ name: OrgCleanup
 # Definition when the workflow should run
 on:
   pull_request:
-    branches: [**-QA]
+    branches: [*-QA]
     types: [closed]
 
 # Jobs to be executed
