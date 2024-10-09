@@ -1,0 +1,49 @@
+# Unique name for this workflow
+name: OrgCleanup
+
+# Definition when the workflow should run
+on:
+  pull_request:
+    branches:
+      - "**-QA"
+    types: [closed]
+
+# Jobs to be executed
+jobs:
+  delete-scratch-org:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the source code
+      - name: "Checkout source code"
+        uses: actions/checkout@v4
+
+      # Install Salesforce CLI
+      - name: "Install Salesforce CLI"
+        run: |
+          npm install @salesforce/cli --location=global
+          nodeInstallPath=$(npm config get prefix)
+          echo "$nodeInstallPath/bin" >> $GITHUB_PATH
+          sf --version
+
+      # Store secret for dev hub
+      - name: "Populate auth file with DEVHUB_SFDX_URL secret"
+        shell: bash
+        run: |
+          echo ${{ secrets.DEVHUB_SFDX_URL }} > ./DEVHUB_SFDX_URL.txt
+          secretFileSize=$(wc -c "./DEVHUB_SFDX_URL.txt" | awk '{print $1}')
+          if [ $secretFileSize == 1 ]; then
+              echo "Missing DEVHUB_SFDX_URL secret. Is this workflow running on a fork?";
+              exit 1;
+          fi
+
+      # Authenticate dev hub
+      - name: "Authenticate Dev Hub"
+        run: sf org login sfdx-url -f ./DEVHUB_SFDX_URL.txt -a devhub -d
+
+      # List orgs
+      - name: "List orgs"
+        run: sf org list
+
+      # Delete branch's scratch org
+      - name: "Delete scratch org"
+        run: sf data delete record --sobject ActiveScratchOrg --where "OrgName=lp-eta-${{ github.head_ref }}" --target-org devhub
