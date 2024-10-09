@@ -47,7 +47,4 @@ jobs:
       # Delete branch's scratch org
       - name: "Delete scratch org"
         run: |
-          project="lp-eta"
-          branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
-          scratchOrgName="$project-$branch"
-          sf data delete record --sobject ActiveScratchOrg --where "OrgName=$scratchOrgName" --target-org devhub
+          sf data delete record --sobject ActiveScratchOrg --where "OrgName=${{ github.ref_name }}" --target-org devhub
