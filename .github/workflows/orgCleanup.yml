@@ -50,4 +50,4 @@ jobs:
           project="lp-eta"
           branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
           scratchOrgName="$project-$branch"
-          sf data delete record --sobject ActiveScratchOrg --where "OrgName=$scratchOrgName"
+          sf data delete record --sobject ActiveScratchOrg --where "OrgName=$scratchOrgName" --target-org devhub
