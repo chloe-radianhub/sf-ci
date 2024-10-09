@@ -40,29 +40,29 @@ jobs:
 
       # Prettier formatting
       - name: "Code formatting verification with Prettier"
-        run: npm run prettier
+        run: npm run prettier:verify
 
       # Lint LWC / Aura
       - name: "Lint Lightning Web Components / Aura Components"
-        run: npm run lint -- --fix
+        run: npm run lint
 
-      # Commit prettier and lint fixes
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        id: auto-commit-action
-        with:
-          commit_message: Apply formatting changes
-          branch: ${{ github.head_ref }}
+      # # Commit prettier and lint fixes
+      # - name: Commit changes
+      #   uses: stefanzweifel/git-auto-commit-action@v5
+      #   id: auto-commit-action
+      #   with:
+      #     commit_message: Apply formatting changes
+      #     branch: ${{ github.head_ref }}
 
-      # Output message if changes were detected
-      - name: "Run if changes have been detected"
-        if: steps.auto-commit-action.outputs.changes_detected == 'true'
-        run: echo "Formatting changes have been made!"
+      # # Output message if changes were detected
+      # - name: "Run if changes have been detected"
+      #   if: steps.auto-commit-action.outputs.changes_detected == 'true'
+      #   run: echo "Formatting changes have been made!"
 
-      # Output message if changes were not detected
-      - name: "Run if no changes have been detected"
-        if: steps.auto-commit-action.outputs.changes_detected == 'false'
-        run: echo "No formatting changes!"
+      # # Output message if changes were not detected
+      # - name: "Run if no changes have been detected"
+      #   if: steps.auto-commit-action.outputs.changes_detected == 'false'
+      #   run: echo "No formatting changes!"
 
       # LWC unit tests
       - name: "Unit test Lightning Web Components"
@@ -84,19 +84,19 @@ jobs:
       - name: "Checkout source code"
         uses: actions/checkout@v4
 
-      # Run PMD scan
-      - name: "Run PMD scan"
-        uses: pmd/pmd-github-action@v2.0.0
-        id: pmd
-        with:
-          version: "6.55.0"
-          sourcePath: "force-app"
-          rulesets: "ruleset.xml"
+      # # Run PMD scan
+      # - name: "Run PMD scan"
+      #   uses: pmd/pmd-github-action@v2.0.0
+      #   id: pmd
+      #   with:
+      #     version: "6.55.0"
+      #     sourcePath: "force-app"
+      #     rulesets: "ruleset.xml"
 
-      # Check for PMD violations
-      - name: "Check for PMD violations"
-        if: steps.pmd.outputs.violations != 0
-        run: exit 1
+      # # Check for PMD violations
+      # - name: "Check for PMD violations"
+      #   if: steps.pmd.outputs.violations != 0
+      #   run: exit 1
 
       # Install Salesforce CLI
       - name: "Install Salesforce CLI"
@@ -105,6 +105,10 @@ jobs:
           nodeInstallPath=$(npm config get prefix)
           echo "$nodeInstallPath/bin" >> $GITHUB_PATH
           sf --version
+
+      # Run PMD
+      - name: "Run PMD"
+        run: sf scanner run --pmdconfig ruleset.xml --severity-threshold 3
 
       # Store secret for dev hub
       - name: "Populate auth file with DEVHUB_SFDX_URL secret"
